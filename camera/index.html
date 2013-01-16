@@ -27,25 +27,25 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"> <!-- ISO-8859-1 -->
     <title>Cordova Mobile Spec</title>
     <link rel="stylesheet" href="../master.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" charset="utf-8" src="../cordova.js"></script>      
+    <script type="text/javascript" charset="utf-8" src="../cordova.js"></script>
 
-      
+
 <script type="text/javascript" charset="utf-8">
 
     var deviceReady = false;
 
     //-------------------------------------------------------------------------
-    // Camera 
+    // Camera
     //-------------------------------------------------------------------------
 
     /**
      * Capture picture
      */
     function getPicture() {
-        
-        //navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50, 
+
+        //navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
         //    destinationType: Camera.DestinationType.FILE_URI, sourceType : Camera.PictureSourceType.CAMERA });
-        
+
         navigator.camera.getPicture(
             function(data) {
                 var img = document.getElementById('camera_image');
@@ -89,12 +89,46 @@
      */
     function getImageInfoUsingNativeUri() {
         var onFileReceived = function(file) {
-            document.getElementById('camera_status').innerHTML = "Success; fullPath: " + file.fullPath + ", name: " + file.name + ", type: " + file.type + ", size: " + file.size + ", date: " + file.lastModifiedDate;
-        }
+            var img = document.getElementById('camera_image');
+            img.style.visibility = "hidden";
+            document.getElementById('camera_status').innerHTML = "Success; fullPath = " + file.fullPath + "; name = " + file.name + "; type = " + file.type + "; size = " + file.size + "; date = " + file.lastModifiedDate;
+        };
         var onError = function(e) {
             console.log("Error getting picture: " + e);
-            document.getElementById('camera_status').innerHTML = "Error getting picture.";
-        }
+            document.getElementById('camera_status').innerHTML = "Error getting picture: " + e;
+        };
+        navigator.camera.getPicture(
+            function(data) {
+                var fileEntry = new FileEntry('image_name.png', data);
+                var file = fileEntry.file(onFileReceived, onError);
+            },
+            onError,
+            { quality: 50, destinationType:
+            Camera.DestinationType.NATIVE_URI, sourceType: Camera.PictureSourceType.PHOTOLIBRARY});
+    };
+
+    /**
+     * Select image from library using a NATIVE_URI destination type
+     */
+    function getImageUsingNativeUri() {
+        var onFileReceived = function(file) {
+            var reader = new FileReader();
+            reader.onload = function(evt) {
+                var img = document.getElementById('camera_image');
+                img.style.visibility = "visible";
+                img.style.display = "block";
+                img.src = evt.target.result;
+                document.getElementById('camera_status').innerHTML = "Success";
+            };
+            reader.onerror = function(evt) {
+                onError(evt.target.error.code);
+            };
+            reader.readAsDataURL(file);
+        };
+        var onError = function(e) {
+            console.log("Error getting picture: " + e);
+            document.getElementById('camera_status').innerHTML = "Error getting picture: " + e;
+        };
         navigator.camera.getPicture(
             function(data) {
                 var fileEntry = new FileEntry('image_name.png', data);
@@ -124,7 +158,7 @@
 
   </head>
   <body onload="init();" id="stage" class="theme">
-  
+
     <h1>Camera</h1>
     <div id="info">
         <b>Status:</b> <span id="camera_status"></span><br>
@@ -133,7 +167,8 @@
     <h2>Action</h2>
     <div class="btn large" onclick="getPicture();">Take Picture</div>
     <div class="btn large" onclick="getImageUsingFileUri();">Select Image Using File URI</div>
-    <div class="btn large" onclick="getImageInfoUsingNativeUri();">Select Image Using Native URI</div>
+    <div class="btn large" onclick="getImageInfoUsingNativeUri();">Native URI: Select Image, Show Info</div>
+    <div class="btn large" onclick="getImageUsingNativeUri();">Native URI: Select Image, Show Image</div>
     <h2> </h2><div class="backBtn" onclick="backHome();">Back</div>
   </body>
-</html>      
+</html>
