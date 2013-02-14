@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.phonegap.hello-world"
+        version   = "1.0.0">
+    <name>Mobile Spec - PGB</name>
+
+    <description>
+        Scans barcodes.
+    </description>
+
+    <author href="http://phonegap.com" email="support@phonegap.com">
+        PhoneGap Team
+    </author>
+
+    <gap:plugin name="ChildBrowser"/>
+    <gap:plugin name="BarcodeScanner"/>
+    <gap:plugin name="Analytics"/>
+    <gap:plugin name="GenericPush" />
+
+    <content src="autotest/pages/all.html" />
+</widget>

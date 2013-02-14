@@ -35,7 +35,7 @@
   <script type="text/javascript" src="../html/ReporterView.js"></script>
   <script type="text/javascript" src="../html/SpecView.js"></script>
   <script type="text/javascript" src="../html/SuiteView.js"></script>
-  <script type="text/javascript" src="../html/TrivialReporter.js"></script>
+  <script type="text/javascript" src="../html/TrivialReporter.js"></script><script type="text/javascript" src="../../jasmine-jsreporter.js"></script>
 
   <!-- Source -->
   <script type="text/javascript" src="../../cordova.js"></script>
@@ -82,9 +82,9 @@
                   var jasmineEnv = jasmine.getEnv();
                   jasmineEnv.updateInterval = 1000;
 
-                  var htmlReporter = new jasmine.HtmlReporter();
+                  var htmlReporter = new jasmine.HtmlReporter(); var jr = new jasmine.JSReporter("http://ec2-184-72-173-33.compute-1.amazonaws.com:5984");
 
-                  jasmineEnv.addReporter(htmlReporter);
+                  jasmineEnv.addReporter(htmlReporter);jasmineEnv.addReporter(jr);
 
                   jasmineEnv.specFilter = function(spec) {
                     return htmlReporter.specFilter(spec);
